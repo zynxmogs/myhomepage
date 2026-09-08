@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#07080b">
+  <meta name="description" content="A minimal dark personal homepage with time, weather, football news and glass shortcuts.">
+  <title>Home</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #07080b;
+      --text: #f4f5f7;
+      --muted: #9ea4ad;
+      --faint: rgba(255,255,255,.08);
+      --glass: rgba(255,255,255,.055);
+      --glass-strong: rgba(255,255,255,.085);
+      --border: rgba(255,255,255,.10);
+      --shadow: 0 22px 70px rgba(0,0,0,.36);
+      --radius: 24px;
+    }
+    * { box-sizing: border-box; }
+    html { min-height: 100%; background: var(--bg); }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    button, input { font: inherit; }
+    a { color: inherit; text-decoration: none; }
+
+    .ambient {
+      position: fixed;
+      inset: -18%;
+      z-index: -3;
+      pointer-events: none;
+      filter: blur(65px) saturate(105%);
+      background:
+        radial-gradient(circle at 20% 20%, rgba(65, 82, 128, .22), transparent 30%),
+        radial-gradient(circle at 76% 26%, rgba(100, 75, 125, .16), transparent 27%),
+        radial-gradient(circle at 55% 84%, rgba(45, 110, 105, .14), transparent 28%);
+      animation: drift 22s ease-in-out infinite alternate;
+      transform: translate3d(0,0,0);
+    }
+    .grain {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      pointer-events: none;
+      opacity: .035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E");
+    }
+    @keyframes drift {
+      from { transform: translate3d(-2%, -1%, 0) scale(1); }
+      to { transform: translate3d(3%, 2%, 0) scale(1.08); }
+    }
+
+    .shell {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 34px 0 36px;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 64px;
+    }
+    .brand {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .04em;
+      color: rgba(255,255,255,.76);
+    }
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .dot { width: 6px; height: 6px; border-radius: 999px; background: #87d7ad; box-shadow: 0 0 14px rgba(135,215,173,.55); }
+
+    .hero { text-align: center; margin: 0 auto 56px; }
+    .eyebrow { color: var(--muted); font-size: 14px; margin-bottom: 12px; min-height: 20px; }
+    .time {
+      font-size: clamp(66px, 13vw, 148px);
+      line-height: .9;
+      letter-spacing: -.075em;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      margin-left: -.075em;
+    }
+    .date {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 15px;
+      letter-spacing: .01em;
+    }
+
+    .search {
+      width: min(720px, 100%);
+      margin: 0 auto;
+      position: relative;
+    }
+    .search input {
+      width: 100%;
+      height: 58px;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.045);
+      color: var(--text);
+      outline: none;
+      padding: 0 56px 0 20px;
+      box-shadow: 0 16px 50px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.035);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      transition: .22s ease;
+    }
+    .search input::placeholder { color: #777d87; }
+    .search input:focus { border-color: rgba(255,255,255,.17); background: rgba(255,255,255,.06); box-shadow: 0 18px 54px rgba(0,0,0,.22), 0 0 0 4px rgba(255,255,255,.025); }
+    .search-icon { position: absolute; right: 19px; top: 50%; transform: translateY(-50%); color: #8e949e; pointer-events: none; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 18px;
+    }
+    .card {
+      border: 1px solid var(--border);
+      background: linear-gradient(135deg, rgba(255,255,255,.07), rgba(255,255,255,.035));
+      border-radius: var(--radius);
+      box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,.04);
+      backdrop-filter: blur(22px) saturate(115%);
+      -webkit-backdrop-filter: blur(22px) saturate(115%);
+      overflow: hidden;
+    }
+    .card-head { display: flex; justify-content: space-between; align-items: center; padding: 21px 22px 12px; }
+    .label { font-size: 12px; font-weight: 600; color: #aeb4bd; text-transform: uppercase; letter-spacing: .11em; }
+    .location { color: #7f8690; font-size: 11px; max-width: 45%; text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .weather { padding: 8px 22px 22px; }
+    .weather-main { display:flex; align-items: center; gap: 16px; }
+    .weather-icon { font-size: 44px; width: 54px; text-align: center; }
+    .temp { font-size: 44px; line-height: 1; font-weight: 500; letter-spacing: -.06em; font-variant-numeric: tabular-nums; }
+    .condition { color: var(--muted); font-size: 13px; margin-top: 5px; }
+    .weather-meta { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 22px; }
+    .meta-box { border-radius: 14px; padding: 12px; background: rgba(255,255,255,.035); border: 1px solid rgba(255,255,255,.055); }
+    .meta-box .k { font-size: 10px; color: #777e89; text-transform: uppercase; letter-spacing: .09em; }
+    .meta-box .v { margin-top: 5px; font-size: 13px; color: #d7dae0; font-variant-numeric: tabular-nums; }
+
+    .news-list { padding: 6px 12px 12px; }
+    .news-item { display:block; padding: 14px 10px; border-radius: 15px; transition: background .2s ease, transform .2s ease; }
+    .news-item:hover { background: rgba(255,255,255,.045); transform: translateY(-1px); }
+    .news-title { font-size: 14px; line-height: 1.45; color: #e8e9ec; }
+    .news-meta { display:flex; gap: 8px; margin-top: 7px; font-size: 10px; color: #797f89; }
+    .news-empty { padding: 22px 10px 26px; color: #858b95; font-size: 13px; line-height: 1.5; }
+
+    .shortcuts { margin-top: 18px; }
+    .shortcuts-head { display:flex; justify-content:space-between; align-items:center; margin: 0 2px 12px; }
+    .shortcut-grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0,1fr));
+      gap: 12px;
+    }
+    .shortcut {
+      min-width: 0;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      min-height: 58px;
+      padding: 12px 10px;
+      border-radius: 17px;
+      border: 1px solid rgba(255,255,255,.09);
+      background: linear-gradient(145deg, rgba(255,255,255,.068), rgba(255,255,255,.03));
+      color: #e2e4e8;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.045), 0 10px 30px rgba(0,0,0,.16);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      transition: transform .18s ease, background .18s ease, border-color .18s ease;
+    }
+    .shortcut:hover { transform: translateY(-2px); background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.14); }
+    .shortcut:active { transform: scale(.98); }
+    .shortcut svg { flex: 0 0 auto; opacity: .85; }
+    .shortcut span { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:12px; font-weight:500; }
+
+    footer { text-align:center; color:#666c75; font-size:11px; margin-top: 34px; }
+    .location-prompt { cursor:pointer; }
+    .location-prompt:hover { color:#a9afb7; }
+
+    @media (max-width: 820px) {
+      .grid { grid-template-columns: 1fr; }
+      .shortcut-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+      .topbar { margin-bottom: 50px; }
+    }
+    @media (max-width: 520px) {
+      .shell { width: min(100% - 20px, 1120px); padding-top: 20px; }
+      .topbar { margin-bottom: 40px; }
+      .hero { margin-bottom: 40px; }
+      .time { font-size: clamp(58px, 19vw, 92px); }
+      .date { font-size: 13px; }
+      .weather-meta { grid-template-columns: repeat(3, 1fr); }
+      .shortcut-grid { gap: 9px; }
+      .shortcut { min-height: 56px; padding: 10px 7px; }
+      .shortcut span { font-size: 11px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="ambient" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">HOME</div>
+      <div class="status"><span class="dot"></span><span id="statusText">Online</span></div>
+    </header>
+
+    <section class="hero" aria-label="Welcome">
+      <div class="eyebrow" id="greeting">Good evening.</div>
+      <div class="time" id="time">--:--</div>
+      <div class="date" id="date">Loading date…</div>
+    </section>
+
+    <form class="search" id="searchForm" role="search">
+      <input id="searchInput" type="search" autocomplete="off" spellcheck="false" placeholder="Search the web…" aria-label="Search the web">
+      <span class="search-icon" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="11" cy="11" r="6.7"></circle><path d="m16 16 5 5"></path></svg>
+      </span>
+    </form>
+
+    <section class="grid" style="margin-top:18px">
+      <article class="card" aria-label="Weather">
+        <div class="card-head"><div class="label">Weather</div><div id="location" class="location location-prompt" title="Tap to set location">Detecting location…</div></div>
+        <div class="weather">
+          <div class="weather-main">
+            <div class="weather-icon" id="weatherIcon">—</div>
+            <div><div class="temp" id="temperature">--°</div><div class="condition" id="condition">Loading weather…</div></div>
+          </div>
+          <div class="weather-meta">
+            <div class="meta-box"><div class="k">Feels</div><div class="v" id="feels">—</div></div>
+            <div class="meta-box"><div class="k">Wind</div><div class="v" id="wind">—</div></div>
+            <div class="meta-box"><div class="k">Humidity</div><div class="v" id="humidity">—</div></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card" aria-label="Football news">
+        <div class="card-head"><div class="label">Football</div><div class="location">Latest</div></div>
+        <div class="news-list" id="newsList"><div class="news-empty">Loading football headlines…</div></div>
+      </article>
+    </section>
+
+    <section class="shortcuts" aria-label="Shortcuts">
+      <div class="shortcuts-head"><div class="label">Shortcuts</div></div>
+      <nav class="shortcut-grid">
+        <a class="shortcut" href="https://youtube.com" target="_blank" rel="noopener"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="14" rx="4"></rect><path d="m10 9 5 3-5 3V9Z"></path></svg><span>YouTube</span></a>
+        <a class="shortcut" href="https://github.com" target="_blank" rel="noopener"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .9A11.1 11.1 0 0 0 8.49 22.53c.56.1.77-.24.77-.54v-2.1c-3.14.68-3.8-1.34-3.8-1.34-.51-1.31-1.24-1.65-1.24-1.65-1.02-.7.08-.69.08-.69 1.13.08 1.73 1.16 1.73 1.16 1 1.72 2.63 1.23 3.27.94.1-.73.39-1.23.71-1.51-2.51-.28-5.15-1.25-5.15-5.57 0-1.23.44-2.23 1.16-3.02-.12-.28-.5-1.43.11-2.98 0 0 .95-.3 3.11 1.15a10.78 10.78 0 0 1 5.66 0c2.16-1.45 3.11-1.15 3.11-1.15.61 1.55.23 2.7.11 2.98.72.79 1.16 1.79 1.16 3.02 0 4.33-2.64 5.28-5.16 5.56.4.34.75 1 .75 2.02v3.01c0 .3.2.64.78.53A11.1 11.1 0 0 0 12 .9Z"></path></svg><span>GitHub</span></a>
+        <a class="shortcut" href="https://discord.com/app" target="_blank" rel="noopener"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M19.4 6.1A16 16 0 0 0 15.5 5l-.5 1a14 14 0 0 0-6 0l-.5-1a16 16 0 0 0-3.9 1.1C3.4 9 3 12.7 3.2 16.4a16 16 0 0 0 4.9 2.5l1.2-1.7a9.8 9.8 0 0 1-1.9-.9l.5-.4a11.6 11.6 0 0 0 8.2 0l.5.4a9.8 9.8 0 0 1-1.9.9l1.2 1.7a16 16 0 0 0 4.9-2.5c.3-4.3-.6-8-1.4-10.3Z"></path><circle cx="8.8" cy="12.2" r="1"></circle><circle cx="15.2" cy="12.2" r="1"></circle></svg><span>Discord</span></a>
+        <a class="shortcut" href="https://open.spotify.com" target="_blank" rel="noopener"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"></circle><path d="M8 10.2c2.9-.9 5.7-.7 8.3.3M8.4 13.1c2.6-.7 5-.5 7.2.2M9 16c2-.5 3.8-.4 5.5.1"></path></svg><span>Spotify</span></a>
+        <a class="shortcut" href="https://www.google.com" target="_blank" rel="noopener"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"></circle><path d="M12 7a5 5 0 1 0 4.2 7.7M12 12h8"></path></svg><span>Google</span></a>
+        <a class="shortcut" href="https://mail.google.com" target="_blank" rel="noopener"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m4 7 8 6 8-6"></path></svg><span>Gmail</span></a>
+      </nav>
+    </section>
+
+    <footer>Made for a quiet home screen · Weather by Open-Meteo · News via RSS</footer>
+  </main>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    const state = {
+      weather: null,
+      location: null
+    };
+
+    const WEATHER_CODES = {
+      0: ['Clear sky', '☀️'],
+      1: ['Mainly clear', '🌤️'],
+      2: ['Partly cloudy', '⛅'],
+      3: ['Overcast', '☁️'],
+      45: ['Fog', '🌫️'], 48: ['Rime fog', '🌫️'],
+      51: ['Light drizzle', '🌦️'], 53: ['Drizzle', '🌦️'], 55: ['Heavy drizzle', '🌧️'],
+      56: ['Freezing drizzle', '🌧️'], 57: ['Heavy freezing drizzle', '🌧️'],
+      61: ['Light rain', '🌦️'], 63: ['Rain', '🌧️'], 65: ['Heavy rain', '🌧️'],
+      66: ['Freezing rain', '🌧️'], 67: ['Heavy freezing rain', '🌧️'],
+      71: ['Light snow', '🌨️'], 73: ['Snow', '❄️'], 75: ['Heavy snow', '❄️'],
+      77: ['Snow grains', '❄️'],
+      80: ['Light showers', '🌦️'], 81: ['Showers', '🌧️'], 82: ['Heavy showers', '⛈️'],
+      85: ['Snow showers', '🌨️'], 86: ['Heavy snow showers', '🌨️'],
+      95: ['Thunderstorm', '⛈️'], 96: ['Thunderstorm + hail', '⛈️'], 99: ['Thunderstorm + hail', '⛈️']
+    };
+
+    function updateClock() {
+      const now = new Date();
+      $('time').textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+      $('date').textContent = now.toLocaleDateString([], { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+      const hour = now.getHours();
+      $('greeting').textContent = hour < 5 ? 'Good night.' : hour < 12 ? 'Good morning.' : hour < 18 ? 'Good afternoon.' : 'Good evening.';
+      document.title = `${$('time').textContent} · Home`;
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    $('searchForm').addEventListener('submit', (event) => {
+      event.preventDefault();
+      const q = $('searchInput').value.trim();
+      if (q) window.location.href = `https://www.google.com/search?q=${encodeURIComponent(q)}`;
+    });
+
+    function setStatus(text, online = true) {
+      $('statusText').textContent = text;
+      document.querySelector('.dot').style.background = online ? '#87d7ad' : '#d7a887';
+      document.querySelector('.dot').style.boxShadow = online ? '0 0 14px rgba(135,215,173,.55)' : '0 0 14px rgba(215,168,135,.4)';
+    }
+
+    async function reverseGeocode(lat, lon) {
+      const url = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`;
+      try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('reverse geocode failed');
+        const data = await res.json();
+        return data?.city || data?.locality || data?.principalSubdivision ? { name: data.city || data.locality || data.principalSubdivision, country: data.countryName || '' } : null;
+      } catch { return null; }
+    }
+
+    async function fetchWeather(lat, lon) {
+      const params = new URLSearchParams({
+        latitude: lat,
+        longitude: lon,
+        current: 'temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m',
+        timezone: 'auto',
+        temperature_unit: 'celsius',
+        wind_speed_unit: 'kmh'
+      });
+      const res = await fetch(`https://api.open-meteo.com/v1/forecast?${params}`);
+      if (!res.ok) throw new Error('weather request failed');
+      return res.json();
+    }
+
+    function renderWeather(data, place) {
+      const c = data.current;
+      const info = WEATHER_CODES[c.weather_code] || ['Weather', '•'];
+      $('weatherIcon').textContent = info[1];
+      $('temperature').textContent = `${Math.round(c.temperature_2m)}°`;
+      $('condition').textContent = info[0];
+      $('feels').textContent = `${Math.round(c.apparent_temperature)}°`;
+      $('wind').textContent = `${Math.round(c.wind_speed_10m)} km/h`;
+      $('humidity').textContent = `${Math.round(c.relative_humidity_2m)}%`;
+      $('location').textContent = place ? `${place.name}${place.country ? `, ${place.country}` : ''}` : 'Your location';
+      $('location').title = 'Refresh location';
+      state.weather = data;
+    }
+
+    async function loadWeather() {
+      setStatus('Getting weather…');
+      if (!('geolocation' in navigator)) throw new Error('Geolocation unavailable');
+      const coords = await new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: false, timeout: 10000, maximumAge: 900000 });
+      });
+      const { latitude, longitude } = coords.coords;
+      const [weather, place] = await Promise.all([fetchWeather(latitude, longitude), reverseGeocode(latitude, longitude)]);
+      renderWeather(weather, place);
+      state.location = { latitude, longitude, place };
+      localStorage.setItem('homeLocation', JSON.stringify(state.location));
+      setStatus('Online');
+    }
+
+    async function loadSavedWeather() {
+      const saved = localStorage.getItem('homeLocation');
+      if (!saved) return false;
+      try {
+        const loc = JSON.parse(saved);
+        const [weather, place] = await Promise.all([fetchWeather(loc.latitude, loc.longitude), Promise.resolve(loc.place)]);
+        renderWeather(weather, place);
+        state.location = loc;
+        setStatus('Online');
+        return true;
+      } catch { return false; }
+    }
+
+    $('location').addEventListener('click', async () => {
+      $('location').textContent = 'Refreshing…';
+      try { await loadWeather(); }
+      catch { $('location').textContent = 'Location unavailable'; setStatus('Offline', false); }
+    });
+
+    async function startWeather() {
+      const restored = await loadSavedWeather();
+      if (restored) return;
+      try { await loadWeather(); }
+      catch {
+        $('location').textContent = 'Tap to enable location';
+        $('condition').textContent = 'Weather needs location access.';
+        setStatus('Offline', false);
+      }
+    }
+    startWeather();
+
+    const FOOTBALL_RSS = 'https://news.google.com/rss/search?q=football%20when%3A2d&hl=en-IN&gl=IN&ceid=IN:en';
+    const RSS_PROXY = 'https://api.rss2json.com/v1/api.json?rss_url=';
+
+    function safeText(input) {
+      const node = document.createElement('div');
+      node.innerHTML = input || '';
+      return (node.textContent || '').replace(/\s+/g, ' ').trim();
+    }
+
+    function renderNews(items) {
+      const list = items.filter(Boolean).slice(0, 5).map(item => {
+        const title = safeText(item.title);
+        const link = item.link || `https://news.google.com/search?q=${encodeURIComponent(title)}`;
+        const source = safeText(item.author || item.guid || 'Football');
+        const date = item.pubDate ? new Date(item.pubDate) : null;
+        const relative = date && !Number.isNaN(date.getTime()) ? date.toLocaleDateString([], { day: 'numeric', month: 'short' }) : '';
+        return `<a class="news-item" href="${link}" target="_blank" rel="noopener noreferrer"><div class="news-title">${safeText(title)}</div><div class="news-meta"><span>${safeText(source).slice(0, 40) || 'Football'}</span>${relative ? `<span>·</span><span>${relative}</span>` : ''}</div></a>`;
+      }).join('');
+      $('newsList').innerHTML = list || '<div class="news-empty">No headlines are available right now.</div>';
+    }
+
+    async function loadNews() {
+      try {
+        const res = await fetch(RSS_PROXY + encodeURIComponent(FOOTBALL_RSS), { cache: 'no-store' });
+        if (!res.ok) throw new Error('news request failed');
+        const data = await res.json();
+        if (data.status !== 'ok' || !Array.isArray(data.items)) throw new Error('invalid feed');
+        renderNews(data.items);
+      } catch {
+        $('newsList').innerHTML = `<div class="news-empty">Live headlines couldn't be loaded here. <a href="https://news.google.com/search?q=football" target="_blank" rel="noopener" style="text-decoration:underline;text-underline-offset:3px">Open football news ↗</a></div>`;
+      }
+    }
+    loadNews();
+    setInterval(loadNews, 15 * 60 * 1000);
+  </script>
+</body>
+</html>
