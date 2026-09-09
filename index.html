@@ -10,12 +10,12 @@
 
   <meta
     name="theme-color"
-    content="#06070a"
+    content="#050806"
   >
 
   <meta
     name="description"
-    content="A minimal dark personal homepage with time, weather and glass shortcuts."
+    content="A minimal liquid glass personal homepage with time, weather and shortcuts."
   >
 
   <title>Home</title>
@@ -32,18 +32,25 @@
     :root {
       color-scheme: dark;
 
-      --bg: #06070a;
-      --text: #f5f6f8;
-      --muted: #9ba1ab;
-      --soft: #7d838d;
+      --bg: #050806;
+      --text: #f2f5f2;
+      --muted: #a0aaa3;
+      --soft: #78827b;
 
-      --blue: 89, 112, 255;
-      --purple: 161, 89, 255;
-      --cyan: 52, 191, 199;
-      --pink: 255, 91, 157;
+      --green: 88, 125, 103;
+      --green-bright: 111, 158, 129;
+      --grey: 150, 160, 154;
 
-      --border: rgba(255, 255, 255, 0.09);
-      --shadow: 0 18px 55px rgba(0, 0, 0, 0.28);
+      --glass-bg: rgba(255, 255, 255, 0.055);
+      --glass-bg-strong: rgba(255, 255, 255, 0.075);
+      --glass-border: rgba(255, 255, 255, 0.105);
+      --glass-highlight: rgba(255, 255, 255, 0.055);
+
+      --shadow:
+        0 20px 70px rgba(0, 0, 0, 0.34),
+        0 4px 20px rgba(0, 0, 0, 0.16);
+
+      --radius: 22px;
     }
 
     * {
@@ -69,7 +76,6 @@
         sans-serif;
 
       color: var(--text);
-
       background: var(--bg);
 
       overflow-x: hidden;
@@ -89,138 +95,82 @@
     }
 
     /* =========================================================
-       PERFORMANCE-FRIENDLY BACKGROUND
+       MINIMAL DARK GREY + GREEN GRADIENT WALLPAPER
        ========================================================= */
 
     .background {
       position: fixed;
       inset: 0;
       z-index: -10;
+
       overflow: hidden;
       pointer-events: none;
+
       background:
         radial-gradient(
-          circle at 50% 40%,
-          rgba(255, 255, 255, 0.012),
-          transparent 52%
+          75% 60% at 50% 100%,
+          rgba(61, 87, 72, 0.11),
+          transparent 72%
         ),
-        #06070a;
+        radial-gradient(
+          65% 55% at 15% 15%,
+          rgba(80, 95, 87, 0.08),
+          transparent 68%
+        ),
+        linear-gradient(
+          145deg,
+          #040605 0%,
+          #070a08 38%,
+          #070b08 68%,
+          #040605 100%
+        );
     }
 
-    /*
-      The background intentionally uses a small number of large
-      translucent shapes. Only transform/opacity are animated,
-      avoiding expensive continuous filter animation.
-    */
-
-    .orb {
+    .gradient-layer {
       position: absolute;
-
-      width: 38vw;
-      height: 38vw;
-
-      min-width: 260px;
-      min-height: 260px;
-
-      border-radius: 50%;
-
-      pointer-events: none;
-
-      will-change: transform, opacity;
-
-      opacity: 0.62;
-    }
-
-    .orb-1 {
-      top: -14vw;
-      left: -10vw;
+      inset: -12%;
 
       background:
         radial-gradient(
-          circle,
-          rgba(var(--blue), 0.22) 0%,
-          rgba(var(--blue), 0.075) 40%,
-          transparent 72%
+          ellipse at 18% 20%,
+          rgba(109, 126, 115, 0.11),
+          transparent 31%
+        ),
+        radial-gradient(
+          ellipse at 82% 78%,
+          rgba(68, 111, 83, 0.14),
+          transparent 34%
+        ),
+        radial-gradient(
+          ellipse at 55% 48%,
+          rgba(87, 97, 91, 0.045),
+          transparent 44%
         );
 
       animation:
-        moveOne 24s ease-in-out infinite alternate,
-        pulseOne 10s ease-in-out infinite;
+        wallpaperDrift 26s ease-in-out infinite alternate;
+
+      will-change: transform;
     }
 
-    .orb-2 {
-      top: 5vh;
-      right: -13vw;
-
-      background:
-        radial-gradient(
-          circle,
-          rgba(var(--purple), 0.19) 0%,
-          rgba(var(--purple), 0.06) 40%,
-          transparent 72%
-        );
-
-      animation:
-        moveTwo 28s ease-in-out infinite alternate,
-        pulseTwo 12s ease-in-out infinite;
-    }
-
-    .orb-3 {
-      left: 30%;
-      bottom: -26vw;
-
-      background:
-        radial-gradient(
-          circle,
-          rgba(var(--cyan), 0.14) 0%,
-          rgba(var(--cyan), 0.045) 40%,
-          transparent 72%
-        );
-
-      animation:
-        moveThree 31s ease-in-out infinite alternate,
-        pulseThree 14s ease-in-out infinite;
-    }
-
-    .orb-4 {
-      right: 9%;
-      bottom: 8%;
-
-      width: 280px;
-      height: 280px;
-
-      min-width: 0;
-      min-height: 0;
-
-      background:
-        radial-gradient(
-          circle,
-          rgba(var(--pink), 0.085) 0%,
-          rgba(var(--pink), 0.025) 42%,
-          transparent 73%
-        );
-
-      animation: moveFour 26s ease-in-out infinite alternate;
-    }
-
-    .background::before {
+    .gradient-layer::after {
       content: "";
 
       position: absolute;
-      inset: -20%;
+      inset: 0;
 
       background:
         linear-gradient(
-          115deg,
-          transparent 20%,
-          rgba(74, 102, 255, 0.018) 36%,
-          transparent 50%,
-          rgba(162, 89, 255, 0.02) 67%,
-          transparent 80%
+          120deg,
+          transparent 0%,
+          rgba(118, 143, 126, 0.025) 32%,
+          transparent 52%,
+          rgba(77, 113, 89, 0.035) 72%,
+          transparent 100%
         );
 
       animation:
-        backgroundSweep 30s ease-in-out infinite alternate;
+        wallpaperSweep 22s ease-in-out infinite alternate;
 
       will-change: transform;
     }
@@ -232,109 +182,54 @@
       background:
         radial-gradient(
           ellipse at center,
-          transparent 40%,
-          rgba(2, 3, 6, 0.20) 100%
+          transparent 35%,
+          rgba(2, 4, 3, 0.24) 100%
         );
     }
 
     .grain {
       position: fixed;
       inset: 0;
-      z-index: -9;
 
+      z-index: -9;
       pointer-events: none;
 
       opacity: 0.018;
 
       background-image:
-        url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='.7'/%3E%3C/svg%3E");
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='.65'/%3E%3C/svg%3E");
     }
 
-    @keyframes moveOne {
+    @keyframes wallpaperDrift {
       0% {
-        transform: translate3d(0, 0, 0) scale(0.98);
+        transform:
+          translate3d(-2%, -1%, 0)
+          scale(1);
       }
 
       100% {
-        transform: translate3d(9vw, 7vh, 0) scale(1.06);
+        transform:
+          translate3d(2.5%, 2%, 0)
+          scale(1.045);
       }
     }
 
-    @keyframes moveTwo {
+    @keyframes wallpaperSweep {
       0% {
-        transform: translate3d(0, 0, 0) scale(1);
+        transform:
+          translate3d(-3%, 1%, 0);
+        opacity: 0.65;
       }
 
       100% {
-        transform: translate3d(-8vw, 8vh, 0) scale(1.07);
-      }
-    }
-
-    @keyframes moveThree {
-      0% {
-        transform: translate3d(0, 0, 0) scale(0.98);
-      }
-
-      100% {
-        transform: translate3d(9vw, -6vh, 0) scale(1.07);
-      }
-    }
-
-    @keyframes moveFour {
-      0% {
-        transform: translate3d(0, 0, 0) scale(0.95);
-      }
-
-      100% {
-        transform: translate3d(-5vw, -4vh, 0) scale(1.05);
-      }
-    }
-
-    @keyframes pulseOne {
-      0%,
-      100% {
-        opacity: 0.54;
-      }
-
-      50% {
-        opacity: 0.78;
-      }
-    }
-
-    @keyframes pulseTwo {
-      0%,
-      100% {
-        opacity: 0.48;
-      }
-
-      50% {
-        opacity: 0.70;
-      }
-    }
-
-    @keyframes pulseThree {
-      0%,
-      100% {
-        opacity: 0.42;
-      }
-
-      50% {
-        opacity: 0.62;
-      }
-    }
-
-    @keyframes backgroundSweep {
-      0% {
-        transform: translate3d(-5%, -2%, 0);
-      }
-
-      100% {
-        transform: translate3d(5%, 3%, 0);
+        transform:
+          translate3d(3%, -1%, 0);
+        opacity: 1;
       }
     }
 
     /* =========================================================
-       MAIN LAYOUT
+       LAYOUT
        ========================================================= */
 
     .shell {
@@ -347,7 +242,7 @@
       margin: 0 auto;
 
       padding:
-        34px
+        30px
         0
         36px;
     }
@@ -363,24 +258,59 @@
       align-items: center;
       justify-content: space-between;
 
-      min-height: 34px;
+      min-height: 36px;
 
-      margin-bottom: 56px;
+      margin-bottom: 58px;
     }
 
     .brand {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 600;
 
-      letter-spacing: 0.045em;
+      letter-spacing: 0.085em;
 
       color:
         rgba(
-          255,
-          255,
-          255,
-          0.76
+          244,
+          247,
+          244,
+          0.72
         );
+    }
+
+    /* =========================================================
+       LIQUID GLASS BASE
+       ========================================================= */
+
+    .glass {
+      border:
+        1px
+        solid
+        var(--glass-border);
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.072),
+          rgba(255, 255, 255, 0.028) 46%,
+          rgba(93, 125, 103, 0.028) 100%
+        );
+
+      box-shadow:
+        var(--shadow),
+        inset
+        0
+        1px
+        0
+        var(--glass-highlight);
+
+      backdrop-filter:
+        blur(18px)
+        saturate(120%);
+
+      -webkit-backdrop-filter:
+        blur(18px)
+        saturate(120%);
     }
 
     /* =========================================================
@@ -398,88 +328,64 @@
 
       gap: 8px;
 
-      min-height: 34px;
+      min-height: 36px;
 
       padding:
         6px
-        9px;
+        10px;
 
-      border:
-        1px
-        solid
-        rgba(
-          255,
-          255,
-          255,
-          0.07
-        );
-
-      border-radius: 13px;
-
-      background:
-        linear-gradient(
-          135deg,
-          rgba(80, 103, 255, 0.06),
-          rgba(255,255,255,0.025) 55%,
-          rgba(163, 88, 255, 0.03)
-        );
-
-      box-shadow:
-        inset
-        0
-        1px
-        0
-        rgba(
-          255,
-          255,
-          255,
-          0.035
-        );
-
-      backdrop-filter:
-        blur(14px);
-
-      -webkit-backdrop-filter:
-        blur(14px);
+      border-radius: 14px;
 
       max-width: 220px;
 
       transition:
-        background 0.25s ease,
-        border-color 0.25s ease,
-        transform 0.25s ease;
+        transform 0.22s ease,
+        background 0.22s ease,
+        border-color 0.22s ease;
     }
 
     .weather-widget:hover {
-      transform: translateY(-1px);
+      transform:
+        translateY(-1px);
 
       border-color:
         rgba(
-          135,
-          151,
-          255,
-          0.13
+          130,
+          160,
+          142,
+          0.16
         );
 
       background:
         linear-gradient(
           135deg,
-          rgba(80, 103, 255, 0.075),
-          rgba(255,255,255,0.035) 55%,
-          rgba(163, 88, 255, 0.04)
+          rgba(255, 255, 255, 0.08),
+          rgba(255, 255, 255, 0.035),
+          rgba(81, 120, 94, 0.045)
         );
     }
 
     .weather-mini-icon {
-      width: 20px;
-
-      flex: 0 0 20px;
+      width: 21px;
+      flex: 0 0 21px;
 
       font-size: 17px;
-
       line-height: 1;
 
       text-align: center;
+
+      filter:
+        drop-shadow(
+          0
+          4px
+          12px
+          rgba(
+            112,
+            150,
+            125,
+            0.12
+          )
+        );
     }
 
     .weather-mini-info {
@@ -499,7 +405,8 @@
       font-size: 13px;
       font-weight: 600;
 
-      letter-spacing: -0.035em;
+      letter-spacing:
+        -0.035em;
 
       font-variant-numeric:
         tabular-nums;
@@ -535,7 +442,13 @@
     }
 
     .weather-mini-location:hover {
-      color: #adb3bd;
+      color:
+        rgba(
+          194,
+          210,
+          199,
+          0.9
+        );
     }
 
     /* =========================================================
@@ -589,11 +502,11 @@
       text-shadow:
         0
         0
-        32px
+        35px
         rgba(
-          92,
-          114,
-          255,
+          103,
+          138,
+          116,
           0.035
         );
     }
@@ -605,11 +518,11 @@
 
       font-size: 15px;
 
-      letter-spacing: 0.01em;
+      letter-spacing: 0.008em;
     }
 
     /* =========================================================
-       SEARCH
+       SEARCH — LIQUID GLASS
        ========================================================= */
 
     .search {
@@ -624,6 +537,8 @@
       margin:
         0
         auto;
+
+      isolation: isolate;
     }
 
     .search::before {
@@ -631,35 +546,59 @@
 
       position: absolute;
 
-      inset: -1px;
+      inset:
+        -1px;
 
       z-index: -1;
 
-      border-radius: 20px;
+      border-radius: 21px;
 
       background:
-        linear-gradient(
-          110deg,
-          #6279ff,
-          #8d6cff,
-          #c777ff,
-          #50cbd4,
-          #6279ff
+        conic-gradient(
+          from 180deg,
+          rgba(
+            124,
+            145,
+            132,
+            0.0
+          ),
+          rgba(
+            103,
+            143,
+            119,
+            0.52
+          ),
+          rgba(
+            168,
+            177,
+            171,
+            0.34
+          ),
+          rgba(
+            72,
+            124,
+            88,
+            0.42
+          ),
+          rgba(
+            124,
+            145,
+            132,
+            0.0
+          )
         );
-
-      background-size: 250% 100%;
 
       opacity: 0;
 
+      filter:
+        blur(0.5px);
+
+      transform:
+        scale(0.992);
+
       transition:
-        opacity 0.3s ease,
-        transform 0.3s ease;
-
-      animation:
-        searchGlow 6s linear infinite;
-
-      will-change:
-        background-position;
+        opacity 0.35s ease,
+        transform 0.35s ease;
     }
 
     .search::after {
@@ -667,47 +606,61 @@
 
       position: absolute;
 
-      left: 10%;
-      right: 10%;
-      bottom: -13px;
+      left: 12%;
+      right: 12%;
+      bottom: -12px;
 
-      height: 20px;
+      height: 18px;
 
       border-radius: 50%;
 
       background:
-        linear-gradient(
-          90deg,
-          transparent,
-          rgba(92, 113, 255, 0.10),
-          rgba(173, 91, 255, 0.09),
-          rgba(74, 203, 208, 0.07),
-          transparent
+        radial-gradient(
+          ellipse,
+          rgba(
+            92,
+            134,
+            108,
+            0.11
+          ),
+          transparent 70%
         );
+
+      filter:
+        blur(11px);
 
       opacity: 0;
 
-      filter: blur(12px);
+      transform:
+        scaleX(0.86);
 
       transition:
-        opacity 0.3s ease;
+        opacity 0.35s ease,
+        transform 0.35s ease;
     }
 
     .search:focus-within::before {
-      opacity: 0.85;
+      opacity: 0.72;
 
       transform:
-        scale(1.005);
+        scale(1);
+
+      animation:
+        liquidBorder 5s linear infinite;
     }
 
     .search:focus-within::after {
-      opacity: 0.85;
+      opacity: 0.75;
+
+      transform:
+        scaleX(1);
     }
 
     .search input {
       position: relative;
 
       width: 100%;
+
       height: 60px;
 
       padding:
@@ -736,21 +689,21 @@
         linear-gradient(
           135deg,
           rgba(
-            86,
-            109,
             255,
-            0.055
+            255,
+            255,
+            0.065
           ),
           rgba(
             255,
             255,
             255,
-            0.035
+            0.028
           ) 48%,
           rgba(
-            156,
-            88,
-            255,
+            79,
+            119,
+            92,
             0.035
           )
         );
@@ -764,7 +717,17 @@
           255,
           255,
           255,
-          0.04
+          0.045
+        ),
+        inset
+        0
+        -1px
+        0
+        rgba(
+          0,
+          0,
+          0,
+          0.10
         ),
         0
         12px
@@ -777,25 +740,33 @@
         );
 
       backdrop-filter:
-        blur(16px);
+        blur(18px)
+        saturate(125%);
 
       -webkit-backdrop-filter:
-        blur(16px);
+        blur(18px)
+        saturate(125%);
 
       transition:
-        transform 0.28s cubic-bezier(
+        transform 0.3s cubic-bezier(
           0.2,
           0.8,
           0.2,
           1
         ),
-        border-color 0.28s ease,
-        background 0.28s ease,
-        box-shadow 0.28s ease;
+        border-color 0.3s ease,
+        background 0.3s ease,
+        box-shadow 0.3s ease;
     }
 
     .search input::placeholder {
-      color: #777e89;
+      color:
+        rgba(
+          135,
+          143,
+          138,
+          0.88
+        );
 
       transition:
         color 0.2s ease;
@@ -808,31 +779,31 @@
 
       border-color:
         rgba(
-          255,
-          255,
-          255,
-          0.16
+          172,
+          189,
+          178,
+          0.18
         );
 
       background:
         linear-gradient(
           135deg,
           rgba(
-            86,
-            109,
             255,
-            0.075
+            255,
+            255,
+            0.082
           ),
           rgba(
             255,
             255,
             255,
-            0.045
+            0.038
           ) 48%,
           rgba(
-            156,
-            88,
-            255,
+            82,
+            130,
+            98,
             0.055
           )
         );
@@ -846,7 +817,7 @@
           255,
           255,
           255,
-          0.05
+          0.06
         ),
         0
         18px
@@ -855,21 +826,27 @@
           0,
           0,
           0,
-          0.2
+          0.20
         ),
         0
         0
         28px
         rgba(
-          91,
-          113,
-          255,
-          0.06
+          88,
+          133,
+          103,
+          0.075
         );
     }
 
     .search input:focus::placeholder {
-      color: #9198a3;
+      color:
+        rgba(
+          172,
+          181,
+          175,
+          0.95
+        );
     }
 
     .search-icon {
@@ -884,45 +861,52 @@
       transform:
         translateY(-50%);
 
-      color: #8e949e;
+      color: #8d9790;
 
       pointer-events: none;
 
       transition:
-        transform 0.28s
-          cubic-bezier(
-            0.2,
-            0.8,
-            0.2,
-            1
-          ),
+        transform 0.3s cubic-bezier(
+          0.2,
+          0.8,
+          0.2,
+          1
+        ),
         color 0.25s ease;
     }
 
     .search:focus-within
     .search-icon {
-      color: #b3bbff;
+      color:
+        rgba(
+          177,
+          201,
+          185,
+          0.92
+        );
 
       transform:
         translateY(-50%)
-        rotate(-7deg)
         scale(1.05);
     }
 
-    @keyframes searchGlow {
+    @keyframes liquidBorder {
       0% {
-        background-position:
-          0% 50%;
+        transform:
+          scale(1)
+          rotate(0deg);
       }
 
       50% {
-        background-position:
-          100% 50%;
+        transform:
+          scale(1.004)
+          rotate(180deg);
       }
 
       100% {
-        background-position:
-          0% 50%;
+        transform:
+          scale(1)
+          rotate(360deg);
       }
     }
 
@@ -957,12 +941,12 @@
 
       font-weight: 600;
 
-      color: #8f96a0;
+      color: #89928c;
 
       text-transform: uppercase;
 
       letter-spacing:
-        0.13em;
+        0.14em;
     }
 
     .shortcut-grid {
@@ -1008,8 +992,8 @@
         linear-gradient(
           135deg,
           rgba(
-            93,
-            113,
+            255,
+            255,
             255,
             0.065
           ),
@@ -1017,17 +1001,23 @@
             255,
             255,
             255,
-            0.032
-          ) 50%,
+            0.028
+          ) 48%,
           rgba(
-            163,
-            90,
-            255,
-            0.04
+            71,
+            111,
+            84,
+            0.045
           )
         );
 
-      color: #e1e4e9;
+      color:
+        rgba(
+          230,
+          235,
+          231,
+          0.92
+        );
 
       box-shadow:
         inset
@@ -1038,7 +1028,17 @@
           255,
           255,
           255,
-          0.04
+          0.045
+        ),
+        inset
+        0
+        -1px
+        0
+        rgba(
+          0,
+          0,
+          0,
+          0.10
         ),
         0
         8px
@@ -1051,23 +1051,24 @@
         );
 
       backdrop-filter:
-        blur(14px);
+        blur(15px)
+        saturate(120%);
 
       -webkit-backdrop-filter:
-        blur(14px);
+        blur(15px)
+        saturate(120%);
 
       overflow: hidden;
 
       transition:
-        transform 0.2s
-          cubic-bezier(
-            0.2,
-            0.8,
-            0.2,
-            1
-          ),
-        border-color 0.2s ease,
+        transform 0.2s cubic-bezier(
+          0.2,
+          0.8,
+          0.2,
+          1
+        ),
         background 0.2s ease,
+        border-color 0.2s ease,
         box-shadow 0.2s ease;
     }
 
@@ -1081,17 +1082,17 @@
         linear-gradient(
           110deg,
           rgba(
-            95,
-            119,
             255,
-            0.13
+            255,
+            255,
+            0.08
           ),
-          transparent 45%,
+          transparent 40%,
           rgba(
-            173,
-            91,
-            255,
-            0.095
+            79,
+            128,
+            97,
+            0.09
           )
         );
 
@@ -1109,31 +1110,31 @@
 
       border-color:
         rgba(
-          122,
-          141,
-          255,
-          0.16
+          125,
+          155,
+          136,
+          0.17
         );
 
       background:
         linear-gradient(
           135deg,
           rgba(
-            93,
-            113,
             255,
-            0.09
+            255,
+            255,
+            0.08
           ),
           rgba(
             255,
             255,
             255,
-            0.05
-          ) 50%,
+            0.038
+          ) 48%,
           rgba(
-            163,
-            90,
-            255,
+            74,
+            123,
+            91,
             0.065
           )
         );
@@ -1147,16 +1148,25 @@
           255,
           255,
           255,
-          0.05
+          0.06
         ),
         0
         12px
-        28px
+        30px
         rgba(
           0,
           0,
           0,
           0.18
+        ),
+        0
+        0
+        20px
+        rgba(
+          82,
+          125,
+          97,
+          0.045
         );
     }
 
@@ -1179,17 +1189,17 @@
         0
         auto;
 
-      opacity: 0.88;
+      opacity: 0.82;
 
       transition:
-        transform 0.2s
-        ease,
-        opacity 0.2s
-        ease;
+        transform 0.2s ease,
+        opacity 0.2s ease;
     }
 
     .shortcut:hover svg {
-      transform: scale(1.04);
+      transform:
+        scale(1.045);
+
       opacity: 1;
     }
 
@@ -1198,6 +1208,7 @@
       z-index: 1;
 
       font-size: 11px;
+
       font-weight: 500;
 
       white-space: nowrap;
@@ -1210,11 +1221,11 @@
     footer {
       text-align: center;
 
-      color: #5f6670;
+      color: #5f6862;
 
       font-size: 10px;
 
-      margin-top: 32px;
+      margin-top: 30px;
     }
 
     /* =========================================================
@@ -1237,7 +1248,7 @@
       }
 
       .weather-widget {
-        top: -3px;
+        top: -2px;
         right: 0;
 
         max-width: 170px;
@@ -1275,39 +1286,11 @@
       .shortcut span {
         font-size: 11px;
       }
-
-      .orb {
-        width: 300px;
-        height: 300px;
-      }
-
-      .orb-1 {
-        left: -145px;
-        top: -75px;
-      }
-
-      .orb-2 {
-        right: -145px;
-        top: 100px;
-      }
-
-      .orb-3 {
-        left: 2%;
-        bottom: -200px;
-      }
-
-      .orb-4 {
-        width: 220px;
-        height: 220px;
-
-        right: -55px;
-        bottom: 9%;
-      }
     }
 
     @media (max-width: 430px) {
       .weather-widget {
-        max-width: 156px;
+        max-width: 155px;
 
         padding:
           6px
@@ -1340,6 +1323,11 @@
           0
           13px;
       }
+
+      .orb {
+        transform:
+          translate3d(0, 0, 0);
+      }
     }
 
     /* =========================================================
@@ -1365,19 +1353,15 @@
 
 <body>
 
-  <!-- =========================================================
+  <!-- =======================================================
        BACKGROUND
-       ========================================================= -->
+       ======================================================= -->
 
   <div
     class="background"
     aria-hidden="true"
   >
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="orb orb-3"></div>
-    <div class="orb orb-4"></div>
-
+    <div class="gradient-layer"></div>
     <div class="vignette"></div>
   </div>
 
@@ -1398,9 +1382,9 @@
         HOME
       </div>
 
-      <!-- Weather -->
+      <!-- Minimal weather -->
       <div
-        class="weather-widget"
+        class="weather-widget glass"
         aria-label="Current weather"
       >
 
@@ -1572,7 +1556,9 @@
             ></path>
           </svg>
 
-          <span>YouTube</span>
+          <span>
+            YouTube
+          </span>
 
         </a>
 
@@ -1594,7 +1580,9 @@
             <path d="M12 .9A11.1 11.1 0 0 0 8.49 22.53c.56.1.77-.24.77-.54v-2.1c-3.14.68-3.8-1.34-3.8-1.34-.51-1.31-1.24-1.65-1.24-1.65-1.02-.7.08-.69.08-.69 1.13.08 1.73 1.16 1.73 1.16 1 1.72 2.63 1.23 3.27.94.1-.73.39-1.23.71-1.51-2.51-.28-5.15-1.25-5.15-5.57 0-1.23.44-2.23 1.16-3.02-.12-.28-.5-1.43.11-2.98 0 0 .95-.3 3.11 1.15a10.78 10.78 0 0 1 5.66 0c2.16-1.45 3.11-1.15 3.11-1.15.61 1.55.23 2.7.11 2.98.72.79 1.16 1.79 1.16 3.02 0 4.33-2.64 5.28-5.16 5.56.4.34.75 1 .75 2.02v3.01c0 .3.2.64.78.53A11.1 11.1 0 0 0 12 .9Z"></path>
           </svg>
 
-          <span>GitHub</span>
+          <span>
+            GitHub
+          </span>
 
         </a>
 
@@ -1632,7 +1620,9 @@
 
           </svg>
 
-          <span>Discord</span>
+          <span>
+            Discord
+          </span>
 
         </a>
 
@@ -1666,7 +1656,9 @@
 
           </svg>
 
-          <span>Spotify</span>
+          <span>
+            Spotify
+          </span>
 
         </a>
 
@@ -1700,7 +1692,9 @@
 
           </svg>
 
-          <span>Google</span>
+          <span>
+            Google
+          </span>
 
         </a>
 
@@ -1736,7 +1730,9 @@
 
           </svg>
 
-          <span>Gmail</span>
+          <span>
+            Gmail
+          </span>
 
         </a>
 
@@ -1940,7 +1936,8 @@
           now.getDate() +
           now.getMonth() +
           now.getDay()
-        ) % greetings.length;
+        ) %
+        greetings.length;
 
       $("time").textContent =
         timeString;
