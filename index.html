@@ -10,7 +10,7 @@
 
   <meta
     name="theme-color"
-    content="#06070a"
+    content="#050609"
   >
 
   <meta
@@ -20,14 +20,11 @@
 
   <title>Home</title>
 
-  <link
-    rel="preconnect"
-    href="https://fonts.googleapis.com"
-  >
+  <link rel="preconnect" href="https://fonts.googleapis.com">
 
   <link
     rel="preconnect"
-    href="https://fonts.googleapis.com"
+    href="https://fonts.gstatic.com"
     crossorigin
   >
 
@@ -40,18 +37,18 @@
     :root {
       color-scheme: dark;
 
-      --text: #f6f7f8;
+      --text: #f7f7f8;
       --muted: rgba(245, 247, 249, 0.66);
       --soft: rgba(245, 247, 249, 0.46);
 
       --glass-border: rgba(255, 255, 255, 0.12);
 
       --shadow:
-        0 20px 65px rgba(0, 0, 0, 0.38),
-        0 5px 25px rgba(0, 0, 0, 0.20);
+        0 22px 65px rgba(0, 0, 0, 0.38),
+        0 5px 24px rgba(0, 0, 0, 0.20);
 
       --shadow-soft:
-        0 12px 35px rgba(0, 0, 0, 0.28);
+        0 12px 34px rgba(0, 0, 0, 0.28);
     }
 
     * {
@@ -62,12 +59,13 @@
     body {
       width: 100%;
       height: 100%;
+
       min-height: 100%;
 
       margin: 0;
       padding: 0;
 
-      background: #06070a;
+      background: #050609;
     }
 
     html {
@@ -113,6 +111,7 @@
 
       width: 100%;
       height: 100dvh;
+
       min-height: 100dvh;
 
       overflow: hidden;
@@ -121,83 +120,92 @@
     }
 
     /* =========================================================
-       WALLPAPER
+       LOCAL AESTHETIC WALLPAPER
        ========================================================= */
 
     .wallpaper {
       position: fixed;
+
       inset: 0;
 
       z-index: -20;
 
       overflow: hidden;
 
-      background: #08090d;
+      pointer-events: none;
+
+      background: #050609;
     }
 
     .wallpaper-image {
       position: absolute;
+
       inset: -3%;
 
       width: 106%;
       height: 106%;
 
+      background:
+        #08090d;
+
       background-position: center;
       background-repeat: no-repeat;
       background-size: cover;
 
-      /*
-        A default image is already present here.
-        JavaScript replaces it with a random one.
-      */
-      background-image:
-        url("https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=2400&q=85");
+      transform: scale(1.025);
 
-      transform: scale(1.045);
-
-      filter:
-        brightness(0.52)
-        saturate(0.78)
-        contrast(1.03);
+      transition:
+        opacity 0.65s ease,
+        transform 7s ease;
 
       will-change: transform;
-
-      animation:
-        wallpaperFloat 18s ease-in-out
-        infinite alternate;
     }
+
+    .wallpaper-image.loaded {
+      transform: scale(1.045);
+    }
+
+    /*
+      Keeps every generated wallpaper dark enough
+      for the glass UI to stay readable.
+    */
 
     .wallpaper-overlay {
       position: absolute;
+
       inset: 0;
 
       background:
         linear-gradient(
           180deg,
-          rgba(3, 4, 7, 0.56) 0%,
-          rgba(3, 4, 7, 0.25) 38%,
-          rgba(3, 4, 7, 0.45) 100%
+          rgba(3, 4, 7, 0.54) 0%,
+          rgba(3, 4, 7, 0.27) 42%,
+          rgba(3, 4, 7, 0.49) 100%
         );
+
+      pointer-events: none;
     }
 
     .wallpaper-overlay::after {
       content: "";
 
       position: absolute;
+
       inset: 0;
 
       background:
         linear-gradient(
           90deg,
           rgba(0, 0, 0, 0.18),
-          transparent 30%,
-          transparent 70%,
+          transparent 28%,
+          transparent 72%,
           rgba(0, 0, 0, 0.18)
         );
     }
 
     .wallpaper-vignette {
       position: absolute;
+
       inset: 0;
 
       background:
@@ -208,7 +216,7 @@
         );
     }
 
-    .wallpaper-glow {
+    .wallpaper-shine {
       position: absolute;
 
       width: 55vw;
@@ -217,74 +225,118 @@
       min-width: 260px;
       min-height: 260px;
 
-      top: 8%;
-      left: 13%;
+      left: 15%;
+      top: 10%;
 
       border-radius: 50%;
 
       background:
         radial-gradient(
           circle,
-          rgba(255, 255, 255, 0.035),
+          rgba(255, 255, 255, 0.032),
           transparent 68%
         );
 
-      filter: blur(45px);
+      filter: blur(38px);
 
-      opacity: 0.32;
+      opacity: 0.35;
 
       animation:
-        glowFloat 24s ease-in-out
-        infinite alternate;
+        shineDrift
+        24s
+        ease-in-out
+        infinite
+        alternate;
 
       will-change: transform;
     }
 
     .grain {
       position: fixed;
+
       inset: 0;
 
       z-index: -10;
 
       pointer-events: none;
 
-      opacity: 0.015;
+      opacity: 0.018;
 
       background-image:
-        url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='.6'/%3E%3C/svg%3E");
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='.7'/%3E%3C/svg%3E");
     }
 
-    @keyframes wallpaperFloat {
-      0% {
-        transform: scale(1.045)
-          translate3d(-0.3%, -0.2%, 0);
-      }
-
-      100% {
-        transform: scale(1.065)
-          translate3d(0.7%, 0.5%, 0);
-      }
-    }
-
-    @keyframes glowFloat {
+    @keyframes shineDrift {
       0% {
         transform:
-          translate3d(-2%, -1%, 0)
-          scale(0.98);
+          translate3d(-3%, -2%, 0)
+          scale(0.97);
       }
 
       100% {
         transform:
-          translate3d(4%, 3%, 0)
-          scale(1.04);
+          translate3d(4%, 4%, 0)
+          scale(1.05);
       }
     }
 
     /* =========================================================
-       MAIN CONTENT
+       GLASS SYSTEM
+       ========================================================= */
+
+    .glass {
+      border:
+        1px
+        solid
+        var(--glass-border);
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.085),
+          rgba(18, 19, 24, 0.25) 52%,
+          rgba(255, 255, 255, 0.038)
+        );
+
+      box-shadow:
+        var(--shadow),
+        inset
+        0
+        1px
+        0
+        rgba(
+          255,
+          255,
+          255,
+          0.07
+        ),
+        inset
+        0
+        -1px
+        0
+        rgba(
+          0,
+          0,
+          0,
+          0.14
+        );
+
+      backdrop-filter:
+        blur(20px)
+        saturate(125%);
+
+      -webkit-backdrop-filter:
+        blur(20px)
+        saturate(125%);
+    }
+
+    /* =========================================================
+       LAYOUT
        ========================================================= */
 
     .shell {
+      position: relative;
+
       width:
         min(
           1120px,
@@ -301,6 +353,7 @@
         20px;
 
       display: flex;
+
       flex-direction: column;
 
       overflow: hidden;
@@ -313,7 +366,10 @@
     .topbar {
       position: relative;
 
-      flex: 0 0 auto;
+      flex:
+        0
+        0
+        auto;
 
       min-height: 38px;
 
@@ -333,14 +389,15 @@
 
       font-weight: 600;
 
-      letter-spacing: 0.09em;
+      letter-spacing:
+        0.09em;
 
       color:
         rgba(
           255,
           255,
           255,
-          0.72
+          0.74
         );
 
       text-shadow:
@@ -362,8 +419,8 @@
     .weather-widget {
       position: absolute;
 
-      right: 0;
       top: 0;
+      right: 0;
 
       display: inline-flex;
 
@@ -379,56 +436,7 @@
         6px
         10px;
 
-      border:
-        1px
-        solid
-        var(--glass-border);
-
       border-radius: 14px;
-
-      background:
-        linear-gradient(
-          135deg,
-          rgba(
-            255,
-            255,
-            255,
-            0.075
-          ),
-          rgba(
-            10,
-            11,
-            15,
-            0.28
-          ) 55%,
-          rgba(
-            255,
-            255,
-            255,
-            0.035
-          )
-        );
-
-      box-shadow:
-        var(--shadow-soft),
-        inset
-        0
-        1px
-        0
-        rgba(
-          255,
-          255,
-          255,
-          0.06
-        );
-
-      backdrop-filter:
-        blur(18px)
-        saturate(125%);
-
-      -webkit-backdrop-filter:
-        blur(18px)
-        saturate(125%);
 
       transition:
         transform 0.22s ease,
@@ -445,7 +453,7 @@
           255,
           255,
           255,
-          0.17
+          0.18
         );
 
       background:
@@ -455,12 +463,12 @@
             255,
             255,
             255,
-            0.095
+            0.10
           ),
           rgba(
-            10,
-            11,
-            15,
+            20,
+            21,
+            26,
             0.32
           )
         );
@@ -500,7 +508,8 @@
 
       font-weight: 600;
 
-      letter-spacing: -0.035em;
+      letter-spacing:
+        -0.035em;
 
       font-variant-numeric:
         tabular-nums;
@@ -556,7 +565,10 @@
        ========================================================= */
 
     .hero {
-      flex: 0 0 auto;
+      flex:
+        0
+        0
+        auto;
 
       text-align: center;
 
@@ -583,8 +595,12 @@
           0,
           0,
           0,
-          0.38
+          0.4
         );
+
+      transition:
+        opacity 0.25s ease,
+        transform 0.25s ease;
     }
 
     .time {
@@ -617,11 +633,11 @@
           0,
           0,
           0,
-          0.35
+          0.36
         ),
         0
         0
-        70px
+        72px
         rgba(
           255,
           255,
@@ -638,7 +654,7 @@
           242,
           244,
           248,
-          0.67
+          0.68
         );
 
       font-size: 14px;
@@ -654,7 +670,7 @@
           0,
           0,
           0,
-          0.36
+          0.38
         );
     }
 
@@ -692,18 +708,39 @@
 
       z-index: -1;
 
-      border-radius: 20px;
+      border-radius: 21px;
 
       background:
         linear-gradient(
           110deg,
-          rgba(255,255,255,0.10),
-          rgba(255,255,255,0.025),
-          rgba(255,255,255,0.10),
-          rgba(255,255,255,0.025)
+          rgba(
+            255,
+            255,
+            255,
+            0.11
+          ),
+          rgba(
+            255,
+            255,
+            255,
+            0.025
+          ),
+          rgba(
+            255,
+            255,
+            255,
+            0.11
+          ),
+          rgba(
+            255,
+            255,
+            255,
+            0.025
+          )
         );
 
-      background-size: 250% 100%;
+      background-size:
+        250% 100%;
 
       opacity: 0.42;
 
@@ -724,7 +761,7 @@
 
       left: 12%;
       right: 12%;
-      bottom: -11px;
+      bottom: -12px;
 
       height: 18px;
 
@@ -735,7 +772,7 @@
           0,
           0,
           0,
-          0.38
+          0.40
         );
 
       filter:
@@ -764,14 +801,20 @@
           255,
           255,
           255,
-          0.115
+          0.11
         );
 
       border-radius: 19px;
 
       outline: none;
 
-      color: var(--text);
+      color:
+        rgba(
+          255,
+          255,
+          255,
+          0.96
+        );
 
       background:
         linear-gradient(
@@ -780,19 +823,19 @@
             255,
             255,
             255,
-            0.075
+            0.078
           ),
           rgba(
-            9,
             10,
-            14,
+            11,
+            15,
             0.34
           ) 52%,
           rgba(
             255,
             255,
             255,
-            0.042
+            0.045
           )
         );
 
@@ -828,24 +871,24 @@
         );
 
       backdrop-filter:
-        blur(24px)
+        blur(23px)
         saturate(130%);
 
       -webkit-backdrop-filter:
-        blur(24px)
+        blur(23px)
         saturate(130%);
 
       transition:
-        transform 0.28s
+        transform 0.30s
           cubic-bezier(
             0.2,
             0.8,
             0.2,
             1
           ),
-        background 0.28s ease,
-        border-color 0.28s ease,
-        box-shadow 0.28s ease;
+        border-color 0.30s ease,
+        background 0.30s ease,
+        box-shadow 0.30s ease;
     }
 
     .search input::placeholder {
@@ -854,7 +897,7 @@
           230,
           233,
           238,
-          0.44
+          0.46
         );
 
       transition:
@@ -871,7 +914,7 @@
           255,
           255,
           255,
-          0.19
+          0.20
         );
 
       background:
@@ -881,19 +924,19 @@
             255,
             255,
             255,
-            0.10
+            0.105
           ),
           rgba(
-            9,
             10,
-            14,
+            11,
+            15,
             0.39
           ) 52%,
           rgba(
             255,
             255,
             255,
-            0.055
+            0.06
           )
         );
 
@@ -905,7 +948,7 @@
           0,
           0,
           0,
-          0.34
+          0.35
         ),
         inset
         0
@@ -919,7 +962,7 @@
         ),
         0
         0
-        35px
+        34px
         rgba(
           255,
           255,
@@ -934,7 +977,7 @@
           240,
           243,
           247,
-          0.58
+          0.60
         );
     }
 
@@ -961,7 +1004,7 @@
       pointer-events: none;
 
       transition:
-        transform 0.28s
+        transform 0.30s
           cubic-bezier(
             0.2,
             0.8,
@@ -978,12 +1021,12 @@
           255,
           255,
           255,
-          0.78
+          0.80
         );
 
       transform:
         translateY(-50%)
-        scale(1.05);
+        scale(1.06);
     }
 
     @keyframes searchBorder {
@@ -1008,7 +1051,10 @@
        ========================================================= */
 
     .shortcuts {
-      flex: 0 0 auto;
+      flex:
+        0
+        0
+        auto;
 
       width:
         min(
@@ -1025,9 +1071,8 @@
     .shortcut-grid {
       display: flex;
 
-      justify-content: center;
-
       align-items: center;
+      justify-content: center;
 
       flex-wrap: wrap;
 
@@ -1070,19 +1115,19 @@
             255,
             255,
             255,
-            0.075
+            0.078
           ),
           rgba(
             11,
             12,
             16,
-            0.32
+            0.31
           ) 52%,
           rgba(
             255,
             255,
             255,
-            0.04
+            0.043
           )
         );
 
@@ -1091,7 +1136,7 @@
           241,
           243,
           246,
-          0.92
+          0.93
         );
 
       box-shadow:
@@ -1114,7 +1159,7 @@
           0,
           0,
           0,
-          0.12
+          0.13
         );
 
       backdrop-filter:
@@ -1128,16 +1173,16 @@
       overflow: hidden;
 
       transition:
-        transform 0.2s
+        transform 0.20s
           cubic-bezier(
             0.2,
             0.8,
             0.2,
             1
           ),
-        border-color 0.2s ease,
-        background 0.2s ease,
-        box-shadow 0.2s ease;
+        border-color 0.20s ease,
+        background 0.20s ease,
+        box-shadow 0.20s ease;
     }
 
     .shortcut::before {
@@ -1154,9 +1199,9 @@
             255,
             255,
             255,
-            0.08
+            0.085
           ),
-          transparent 45%,
+          transparent 44%,
           rgba(
             255,
             255,
@@ -1168,7 +1213,7 @@
       opacity: 0;
 
       transition:
-        opacity 0.2s ease;
+        opacity 0.20s ease;
 
       pointer-events: none;
     }
@@ -1192,12 +1237,12 @@
             255,
             255,
             255,
-            0.10
+            0.105
           ),
           rgba(
-            12,
-            13,
-            18,
+            14,
+            15,
+            20,
             0.37
           ) 52%,
           rgba(
@@ -1253,8 +1298,8 @@
       opacity: 0.84;
 
       transition:
-        transform 0.2s ease,
-        opacity 0.2s ease;
+        transform 0.20s ease,
+        opacity 0.20s ease;
     }
 
     .shortcut:hover svg {
@@ -1297,7 +1342,7 @@
           235,
           238,
           241,
-          0.30
+          0.31
         );
 
       font-size: 9px;
@@ -1336,7 +1381,7 @@
       .topbar {
         min-height: 36px;
 
-        margin-bottom: 37px;
+        margin-bottom: 38px;
       }
 
       .weather-widget {
@@ -1360,7 +1405,6 @@
 
       .date {
         font-size: 13px;
-
         margin-top: 14px;
       }
 
@@ -1380,7 +1424,7 @@
         font-size: 11px;
       }
 
-      .wallpaper-glow {
+      .wallpaper-shine {
         width: 75vw;
         height: 75vw;
 
@@ -1438,7 +1482,7 @@
       }
 
       .topbar {
-        margin-bottom: 26px;
+        margin-bottom: 27px;
       }
 
       .hero {
@@ -1467,10 +1511,6 @@
       }
     }
 
-    /* =========================================================
-       REDUCED MOTION
-       ========================================================= */
-
     @media (prefers-reduced-motion: reduce) {
       *,
       *::before,
@@ -1490,14 +1530,10 @@
 
 <body>
 
-  <!-- =======================================================
-       APP
-       ======================================================= -->
-
   <div class="app">
 
     <!-- =====================================================
-         WALLPAPER
+         LOCAL GENERATED WALLPAPER
          ===================================================== -->
 
     <div
@@ -1512,7 +1548,7 @@
 
       <div class="wallpaper-overlay"></div>
 
-      <div class="wallpaper-glow"></div>
+      <div class="wallpaper-shine"></div>
 
       <div class="wallpaper-vignette"></div>
 
@@ -1522,10 +1558,6 @@
       class="grain"
       aria-hidden="true"
     ></div>
-
-    <!-- =====================================================
-         PAGE
-         ===================================================== -->
 
     <main class="shell">
 
@@ -1541,7 +1573,7 @@
 
         <!-- Weather -->
         <div
-          class="weather-widget"
+          class="weather-widget glass"
           aria-label="Current weather"
         >
 
@@ -1809,26 +1841,429 @@
     "use strict";
 
     /* =========================================================
-       RANDOM AESTHETIC WALLPAPER
+       ELEMENT HELPER
        ========================================================= */
 
-    const WALLPAPERS = [
-      "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=2400&q=85",
-      "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=2400&q=85",
-      "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=2400&q=85",
-      "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=2400&q=85",
-      "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=2400&q=85",
-      "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=2400&q=85",
-      "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=2400&q=85",
-      "https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=2400&q=85",
-      "https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=2400&q=85"
+    const $ = (id) =>
+      document.getElementById(id);
+
+    /* =========================================================
+       LOCAL AESTHETIC WALLPAPER ENGINE
+       =========================================================
+
+       Instead of loading wallpapers from an external image
+       service, this creates several fully self-contained SVG
+       artworks directly in the browser.
+
+       Advantages:
+       - Works offline.
+       - Never depends on Unsplash.
+       - No broken image URLs.
+       - No CORS issues.
+       - A random artwork is selected every page load.
+       ========================================================= */
+
+    const WALLPAPER_THEMES = [
+
+      {
+        background: "#090a0f",
+
+        colors: [
+          "#7580a8",
+          "#3f475d",
+          "#171c2c",
+          "#111319"
+        ],
+
+        shapes: [
+          [18, 22, 34],
+          [76, 18, 30],
+          [58, 78, 43]
+        ]
+      },
+
+      {
+        background: "#090a0a",
+
+        colors: [
+          "#8b8378",
+          "#45433f",
+          "#1b1c1a",
+          "#101211"
+        ],
+
+        shapes: [
+          [14, 18, 35],
+          [80, 30, 28],
+          [48, 82, 42]
+        ]
+      },
+
+      {
+        background: "#08090d",
+
+        colors: [
+          "#765f78",
+          "#42364c",
+          "#1a1820",
+          "#101014"
+        ],
+
+        shapes: [
+          [22, 20, 32],
+          [82, 16, 30],
+          [55, 80, 45]
+        ]
+      },
+
+      {
+        background: "#080b0d",
+
+        colors: [
+          "#607d80",
+          "#35484b",
+          "#152024",
+          "#0d1113"
+        ],
+
+        shapes: [
+          [17, 15, 34],
+          [82, 27, 31],
+          [45, 84, 46]
+        ]
+      },
+
+      {
+        background: "#0a0908",
+
+        colors: [
+          "#8d7564",
+          "#514238",
+          "#211b17",
+          "#12100f"
+        ],
+
+        shapes: [
+          [20, 20, 34],
+          [80, 20, 30],
+          [57, 80, 44]
+        ]
+      },
+
+      {
+        background: "#09090d",
+
+        colors: [
+          "#626e91",
+          "#3b405c",
+          "#171a27",
+          "#0e1017"
+        ],
+
+        shapes: [
+          [13, 27, 37],
+          [79, 17, 28],
+          [53, 83, 45]
+        ]
+      },
+
+      {
+        background: "#080b0a",
+
+        colors: [
+          "#687c70",
+          "#3e5147",
+          "#17201b",
+          "#0d1110"
+        ],
+
+        shapes: [
+          [20, 18, 36],
+          [80, 25, 30],
+          [48, 84, 45]
+        ]
+      },
+
+      {
+        background: "#09090b",
+
+        colors: [
+          "#817b87",
+          "#4b4850",
+          "#1f1e23",
+          "#111114"
+        ],
+
+        shapes: [
+          [15, 18, 34],
+          [83, 25, 29],
+          [53, 82, 46]
+        ]
+      }
     ];
+
+    function escapeXml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&apos;");
+    }
+
+    function createWallpaperSvg(theme) {
+      const [
+        colorOne,
+        colorTwo,
+        colorThree,
+        colorFour
+      ] = theme.colors;
+
+      const shapes = theme.shapes;
+
+      const svg = `
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 1600 1000"
+          preserveAspectRatio="xMidYMid slice"
+        >
+
+          <defs>
+
+            <linearGradient
+              id="base"
+              x1="0"
+              y1="0"
+              x2="1"
+              y2="1"
+            >
+              <stop
+                offset="0%"
+                stop-color="${escapeXml(theme.background)}"
+              />
+
+              <stop
+                offset="50%"
+                stop-color="${escapeXml(colorFour)}"
+              />
+
+              <stop
+                offset="100%"
+                stop-color="#050608"
+              />
+            </linearGradient>
+
+            <radialGradient
+              id="one"
+              cx="50%"
+              cy="50%"
+              r="50%"
+            >
+              <stop
+                offset="0%"
+                stop-color="${escapeXml(colorOne)}"
+                stop-opacity=".60"
+              />
+
+              <stop
+                offset="50%"
+                stop-color="${escapeXml(colorOne)}"
+                stop-opacity=".19"
+              />
+
+              <stop
+                offset="100%"
+                stop-color="${escapeXml(colorOne)}"
+                stop-opacity="0"
+              />
+            </radialGradient>
+
+            <radialGradient
+              id="two"
+              cx="50%"
+              cy="50%"
+              r="50%"
+            >
+              <stop
+                offset="0%"
+                stop-color="${escapeXml(colorTwo)}"
+                stop-opacity=".58"
+              />
+
+              <stop
+                offset="52%"
+                stop-color="${escapeXml(colorTwo)}"
+                stop-opacity=".16"
+              />
+
+              <stop
+                offset="100%"
+                stop-color="${escapeXml(colorTwo)}"
+                stop-opacity="0"
+              />
+            </radialGradient>
+
+            <radialGradient
+              id="three"
+              cx="50%"
+              cy="50%"
+              r="50%"
+            >
+              <stop
+                offset="0%"
+                stop-color="${escapeXml(colorThree)}"
+                stop-opacity=".54"
+              />
+
+              <stop
+                offset="54%"
+                stop-color="${escapeXml(colorThree)}"
+                stop-opacity=".14"
+              />
+
+              <stop
+                offset="100%"
+                stop-color="${escapeXml(colorThree)}"
+                stop-opacity="0"
+              />
+            </radialGradient>
+
+            <linearGradient
+              id="shine"
+              x1="0"
+              y1="0"
+              x2="1"
+              y2="1"
+            >
+              <stop
+                offset="0%"
+                stop-color="#ffffff"
+                stop-opacity="0"
+              />
+
+              <stop
+                offset="48%"
+                stop-color="#ffffff"
+                stop-opacity=".045"
+              />
+
+              <stop
+                offset="52%"
+                stop-color="#ffffff"
+                stop-opacity=".01"
+              />
+
+              <stop
+                offset="100%"
+                stop-color="#ffffff"
+                stop-opacity="0"
+              />
+            </linearGradient>
+
+            <filter
+              id="blur"
+              x="-30%"
+              y="-30%"
+              width="160%"
+              height="160%"
+            >
+              <feGaussianBlur
+                stdDeviation="40"
+              />
+            </filter>
+
+            <filter
+              id="blurSmall"
+              x="-30%"
+              y="-30%"
+              width="160%"
+              height="160%"
+            >
+              <feGaussianBlur
+                stdDeviation="18"
+              />
+            </filter>
+
+            <filter id="noise">
+              <feTurbulence
+                type="fractalNoise"
+                baseFrequency=".72"
+                numOctaves="2"
+                stitchTiles="stitch"
+              />
+
+              <feColorMatrix
+                type="saturate"
+                values="0"
+              />
+
+              <feComponentTransfer>
+                <feFuncA
+                  type="table"
+                  tableValues="0 .045"
+                />
+              </feComponentTransfer>
+            </filter>
+
+          </defs>
+
+          <rect
+            width="1600"
+            height="1000"
+            fill="url(#base)"
+          />
+
+          <circle
+            cx="${shapes[0][0] * 16}"
+            cy="${shapes[0][1] * 10}"
+            r="${shapes[0][2] * 10}"
+            fill="url(#one)"
+            filter="url(#blur)"
+          />
+
+          <circle
+            cx="${shapes[1][0] * 16}"
+            cy="${shapes[1][1] * 10}"
+            r="${shapes[1][2] * 10}"
+            fill="url(#two)"
+            filter="url(#blur)"
+          />
+
+          <circle
+            cx="${shapes[2][0] * 16}"
+            cy="${shapes[2][1] * 10}"
+            r="${shapes[2][2] * 10}"
+            fill="url(#three)"
+            filter="url(#blur)"
+          />
+
+          <ellipse
+            cx="820"
+            cy="440"
+            rx="440"
+            ry="230"
+            fill="url(#shine)"
+            opacity=".34"
+            filter="url(#blurSmall)"
+            transform="rotate(-18 820 440)"
+          />
+
+          <rect
+            width="1600"
+            height="1000"
+            filter="url(#noise)"
+            opacity=".30"
+          />
+
+        </svg>
+      `;
+
+      return svg;
+    }
 
     function setRandomWallpaper() {
       const wallpaper =
-        document.getElementById(
-          "wallpaperImage"
-        );
+        $("wallpaperImage");
 
       if (!wallpaper) {
         return;
@@ -1837,29 +2272,33 @@
       const index =
         Math.floor(
           Math.random() *
-          WALLPAPERS.length
+          WALLPAPER_THEMES.length
         );
 
+      const theme =
+        WALLPAPER_THEMES[index];
+
+      const svg =
+        createWallpaperSvg(theme);
+
+      const dataUrl =
+        "data:image/svg+xml;charset=UTF-8," +
+        encodeURIComponent(svg);
+
       wallpaper.style.backgroundImage =
-        `url("${WALLPAPERS[index]}")`;
+        `url("${dataUrl}")`;
+
+      requestAnimationFrame(() => {
+        wallpaper.classList.add(
+          "loaded"
+        );
+      });
     }
 
-    /*
-      Set immediately instead of waiting for a preload.
-      The first wallpaper in CSS also guarantees a background
-      even before JavaScript runs.
-    */
     setRandomWallpaper();
 
     /* =========================================================
-       HELPER
-       ========================================================= */
-
-    const $ = (id) =>
-      document.getElementById(id);
-
-    /* =========================================================
-       WEATHER CODES
+       WEATHER
        ========================================================= */
 
     const WEATHER_CODES = {
@@ -2038,7 +2477,8 @@
           now.getDate() +
           now.getMonth() +
           now.getDay()
-        ) % greetings.length;
+        ) %
+        greetings.length;
 
       $("time").textContent =
         timeString;
@@ -2333,6 +2773,10 @@
       );
     }
 
+    /* =========================================================
+       SAVED LOCATION
+       ========================================================= */
+
     async function loadSavedWeather() {
       let saved = null;
 
@@ -2374,6 +2818,10 @@
       }
     }
 
+    /* =========================================================
+       START WEATHER
+       ========================================================= */
+
     async function startWeather() {
       const restored =
         await loadSavedWeather();
@@ -2396,13 +2844,14 @@
     }
 
     /* =========================================================
-       WEATHER REFRESH
+       REFRESH WEATHER
        ========================================================= */
 
     $("location")
       .addEventListener(
         "click",
         async () => {
+
           const previous =
             $("location")
               .textContent;
@@ -2423,6 +2872,7 @@
       );
 
     startWeather();
+
   </script>
 
 </body>
